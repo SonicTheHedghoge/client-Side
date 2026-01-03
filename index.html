@@ -770,6 +770,138 @@
             cursor: pointer;
         }
         
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            background: var(--dark);
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            padding: 40px;
+            position: relative;
+            transform: translateY(20px);
+            transition: transform 0.4s ease;
+        }
+        
+        .modal.active .modal-content {
+            transform: translateY(0);
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--light);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .modal-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .modal-header h3 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+        
+        .modal-body {
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #cbd5e1;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 15px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--light);
+        }
+        
+        .payment-methods {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .payment-method {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .payment-method.active {
+            border-color: var(--primary);
+            background: rgba(14, 165, 233, 0.1);
+        }
+        
+        .payment-method i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        
+        .reservation-summary {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            font-size: 1.2rem;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 10px;
+        }
+        
         /* Responsive Design */
         @media (max-width: 992px) {
             .hero h1 {
@@ -857,6 +989,10 @@
             .stat-value {
                 font-size: 2rem;
             }
+            
+            .modal-content {
+                padding: 30px 20px;
+            }
         }
         
         /* Scrollbar */
@@ -894,7 +1030,7 @@
                     <li><a href="#avis">Avis</a></li>
                 </ul>
             </nav>
-            <button class="cta-button">
+            <button class="cta-button" id="bookNow">
                 <i class="fab fa-whatsapp"></i>
                 Réserver
             </button>
@@ -914,7 +1050,7 @@
             <li><a href="#scooters">Scooters</a></li>
             <li><a href="#ecologie">Écologie</a></li>
             <li><a href="#avis">Avis</a></li>
-            <li><a href="#">Réserver</a></li>
+            <li><a href="#" id="mobileBook">Réserver</a></li>
         </ul>
     </div>
 
@@ -929,7 +1065,7 @@
                 <h1>Explorez Djerba <span>en Silence</span></h1>
                 <p>Découvrez les circuits cachés de l'île à bord de nos scooters électriques premium. Une expérience écologique unique qui préserve la beauté naturelle de Djerba.</p>
                 <div class="hero-buttons">
-                    <button class="cta-button">
+                    <button class="cta-button" id="heroBook">
                         <i class="fas fa-calendar-check"></i>
                         Réserver Maintenant
                     </button>
@@ -1015,7 +1151,7 @@
                         <div class="circuit-tag">Populaire</div>
                         <h3>Bord de Mer</h3>
                         <p>Parcourez les côtes magnifiques de Djerba en suivant le tracé côtier.</p>
-                        <button class="secondary-button">Découvrir</button>
+                        <button class="secondary-button circuit-book" data-circuit="Bord de Mer">Réserver</button>
                     </div>
                 </div>
                 
@@ -1025,7 +1161,7 @@
                         <div class="circuit-tag">Aventure</div>
                         <h3>Montagnes Verdoyantes</h3>
                         <p>Explorez les paysages montagneux et les forêts luxuriantes de l'intérieur.</p>
-                        <button class="secondary-button">Découvrir</button>
+                        <button class="secondary-button circuit-book" data-circuit="Montagnes Verdoyantes">Réserver</button>
                     </div>
                 </div>
                 
@@ -1035,7 +1171,7 @@
                         <div class="circuit-tag">Culturel</div>
                         <h3>Trésors Culturels</h3>
                         <p>Découvrez les villages traditionnels et l'artisanat local authentique.</p>
-                        <button class="secondary-button">Découvrir</button>
+                        <button class="secondary-button circuit-book" data-circuit="Trésors Culturels">Réserver</button>
                     </div>
                 </div>
             </div>
@@ -1051,56 +1187,57 @@
                     <p>Sélectionnez vos dates et choisissez votre scooter parfait pour explorer Djerba.</p>
                 </div>
                 
-                <form class="booking-form">
+                <form class="booking-form" id="bookingForm">
                     <div class="form-group">
                         <label for="date-debut">Date de Début</label>
-                        <input type="date" id="date-debut" class="form-control">
+                        <input type="date" id="date-debut" class="form-control" required>
                     </div>
                     
                     <div class="form-group">
                         <label for="date-fin">Date de Fin</label>
-                        <input type="date" id="date-fin" class="form-control">
+                        <input type="date" id="date-fin" class="form-control" required>
                     </div>
                     
                     <div class="form-group">
                         <label for="scooter">Type de Scooter</label>
-                        <select id="scooter" class="form-control">
-                            <option>Électrique Standard</option>
-                            <option>Électrique Premium</option>
-                            <option>Électrique Longue Autonomie</option>
+                        <select id="scooter" class="form-control" required>
+                            <option value="">Sélectionnez un scooter</option>
+                            <option value="standard">Électrique Standard (35€/jour)</option>
+                            <option value="premium">Électrique Premium (50€/jour)</option>
+                            <option value="long">Électrique Longue Autonomie (65€/jour)</option>
                         </select>
                     </div>
                     
                     <div class="form-group">
                         <label for="personnes">Nombre de Personnes</label>
-                        <select id="personnes" class="form-control">
-                            <option>1 personne</option>
-                            <option>2 personnes</option>
-                            <option>3 personnes</option>
-                            <option>4 personnes</option>
+                        <select id="personnes" class="form-control" required>
+                            <option value="1">1 personne</option>
+                            <option value="2">2 personnes</option>
+                            <option value="3">3 personnes</option>
+                            <option value="4">4 personnes</option>
                         </select>
                     </div>
                     
                     <div class="form-row">
                         <div class="form-group">
                             <label for="heure">Heure de Départ</label>
-                            <input type="time" id="heure" class="form-control" value="09:00">
+                            <input type="time" id="heure" class="form-control" value="09:00" required>
                         </div>
                         
                         <div class="form-group">
                             <label for="circuit">Circuit Préféré</label>
-                            <select id="circuit" class="form-control">
-                                <option>Sélectionnez un circuit</option>
-                                <option>Bord de Mer</option>
-                                <option>Montagnes Verdoyantes</option>
-                                <option>Trésors Culturels</option>
-                                <option>Circuit Personnalisé</option>
+                            <select id="circuit" class="form-control" required>
+                                <option value="">Sélectionnez un circuit</option>
+                                <option value="Bord de Mer">Bord de Mer</option>
+                                <option value="Montagnes Verdoyantes">Montagnes Verdoyantes</option>
+                                <option value="Trésors Culturels">Trésors Culturels</option>
+                                <option value="Circuit Personnalisé">Circuit Personnalisé</option>
                             </select>
                         </div>
                     </div>
                     
                     <div class="form-group" style="grid-column: 1 / -1;">
-                        <button class="cta-button" style="width: 100%;">
+                        <button type="submit" class="cta-button" style="width: 100%;">
                             <i class="fas fa-search"></i>
                             Vérifier la Disponibilité
                         </button>
@@ -1240,6 +1377,102 @@
         </div>
     </footer>
 
+    <!-- Payment Modal -->
+    <div class="modal" id="paymentModal">
+        <div class="modal-content">
+            <button class="close-modal">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-header">
+                <h3>Finaliser la Réservation</h3>
+                <p>Complétez vos informations pour confirmer votre aventure</p>
+            </div>
+            <div class="modal-body">
+                <form id="paymentForm">
+                    <div class="form-group">
+                        <label for="fullName">Nom Complet</label>
+                        <input type="text" id="fullName" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">Téléphone</label>
+                        <input type="tel" id="phone" class="form-control" required>
+                    </div>
+                    
+                    <div class="reservation-summary">
+                        <h4>Résumé de la Réservation</h4>
+                        <div class="summary-item">
+                            <span>Circuit:</span>
+                            <span id="summaryCircuit">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Dates:</span>
+                            <span id="summaryDates">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Scooter:</span>
+                            <span id="summaryScooter">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Personnes:</span>
+                            <span id="summaryPersons">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Prix par jour:</span>
+                            <span id="summaryPrice">-</span>
+                        </div>
+                        <div class="summary-total">
+                            <span>Total:</span>
+                            <span id="summaryTotal">-</span>
+                        </div>
+                    </div>
+                    
+                    <h4>Méthode de Paiement</h4>
+                    <div class="payment-methods">
+                        <div class="payment-method active" data-method="card">
+                            <i class="fas fa-credit-card"></i>
+                            <div>Carte</div>
+                        </div>
+                        <div class="payment-method" data-method="paypal">
+                            <i class="fab fa-paypal"></i>
+                            <div>PayPal</div>
+                        </div>
+                        <div class="payment-method" data-method="crypto">
+                            <i class="fab fa-bitcoin"></i>
+                            <div>Crypto</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="cardNumber">Numéro de Carte</label>
+                        <input type="text" id="cardNumber" class="form-control" placeholder="1234 5678 9012 3456" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="expiry">Date d'Expiration</label>
+                            <input type="text" id="expiry" class="form-control" placeholder="MM/YY" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="cvv">CVV</label>
+                            <input type="text" id="cvv" class="form-control" placeholder="123" required>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="cta-button" style="width: 100%;">
+                        <i class="fas fa-lock"></i>
+                        Payer Maintenant
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Header scroll effect
         window.addEventListener('scroll', function() {
@@ -1270,18 +1503,22 @@
         });
         
         // Set min date for booking
-        const today = new Date().toISOString().split('T')[0];
-        document.getElementById('date-debut').min = today;
-        document.getElementById('date-fin').min = today;
+        const today = new Date();
+        today.setDate(today.getDate() + 1);
+        const todayStr = today.toISOString().split('T')[0];
+        document.getElementById('date-debut').min = todayStr;
+        document.getElementById('date-fin').min = todayStr;
         
-        // Form submission
-        const bookingForm = document.querySelector('.booking-form');
-        if (bookingForm) {
-            bookingForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                alert('Merci pour votre réservation ! Nous vous contacterons sous peu pour confirmer votre aventure DjerBike.');
-            });
-        }
+        // Initialize date inputs with tomorrow's date
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const tomorrowStr = tomorrow.toISOString().split('T')[0];
+        document.getElementById('date-debut').value = tomorrowStr;
+        
+        const dayAfter = new Date();
+        dayAfter.setDate(dayAfter.getDate() + 2);
+        const dayAfterStr = dayAfter.toISOString().split('T')[0];
+        document.getElementById('date-fin').value = dayAfterStr;
         
         // Mobile menu toggle
         const mobileToggle = document.querySelector('.mobile-toggle');
@@ -1303,16 +1540,134 @@
             }
         });
         
-        // Initialize date inputs with tomorrow's date
-        const tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        const tomorrowStr = tomorrow.toISOString().split('T')[0];
-        document.getElementById('date-debut').value = tomorrowStr;
+        // Booking form submission
+        const bookingForm = document.getElementById('bookingForm');
+        const paymentModal = document.getElementById('paymentModal');
+        const closeModal = document.querySelector('.close-modal');
+        const paymentForm = document.getElementById('paymentForm');
         
-        const dayAfter = new Date();
-        dayAfter.setDate(dayAfter.getDate() + 2);
-        const dayAfterStr = dayAfter.toISOString().split('T')[0];
-        document.getElementById('date-fin').value = dayAfterStr;
+        // Book now buttons
+        document.getElementById('bookNow').addEventListener('click', function() {
+            document.getElementById('date-debut').scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        document.getElementById('heroBook').addEventListener('click', function() {
+            document.getElementById('date-debut').scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        document.getElementById('mobileBook').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('date-debut').scrollIntoView({ behavior: 'smooth' });
+            mobileMenu.classList.remove('active');
+        });
+        
+        // Circuit booking buttons
+        document.querySelectorAll('.circuit-book').forEach(button => {
+            button.addEventListener('click', function() {
+                const circuit = this.getAttribute('data-circuit');
+                document.getElementById('circuit').value = circuit;
+                document.getElementById('date-debut').scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+        
+        // Booking form submission
+        bookingForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const startDate = document.getElementById('date-debut').value;
+            const endDate = document.getElementById('date-fin').value;
+            const scooter = document.getElementById('scooter').value;
+            const persons = document.getElementById('personnes').value;
+            const circuit = document.getElementById('circuit').value;
+            
+            // Validate dates
+            if (new Date(endDate) <= new Date(startDate)) {
+                alert('La date de fin doit être après la date de début');
+                return;
+            }
+            
+            // Calculate price based on scooter type
+            let pricePerDay = 0;
+            let scooterName = '';
+            
+            switch(scooter) {
+                case 'standard':
+                    pricePerDay = 35;
+                    scooterName = 'Électrique Standard';
+                    break;
+                case 'premium':
+                    pricePerDay = 50;
+                    scooterName = 'Électrique Premium';
+                    break;
+                case 'long':
+                    pricePerDay = 65;
+                    scooterName = 'Électrique Longue Autonomie';
+                    break;
+                default:
+                    alert('Veuillez sélectionner un type de scooter');
+                    return;
+            }
+            
+            // Calculate total days
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+            const diffTime = Math.abs(end - start);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+            
+            const total = pricePerDay * diffDays * persons;
+            
+            // Update summary
+            document.getElementById('summaryCircuit').textContent = circuit;
+            document.getElementById('summaryDates').textContent = `${startDate} à ${endDate} (${diffDays} jours)`;
+            document.getElementById('summaryScooter').textContent = scooterName;
+            document.getElementById('summaryPersons').textContent = `${persons} personne(s)`;
+            document.getElementById('summaryPrice').textContent = `${pricePerDay}€/jour`;
+            document.getElementById('summaryTotal').textContent = `${total}€`;
+            
+            // Show payment modal
+            paymentModal.classList.add('active');
+        });
+        
+        // Close modal
+        closeModal.addEventListener('click', function() {
+            paymentModal.classList.remove('active');
+        });
+        
+        // Close modal when clicking outside
+        window.addEventListener('click', function(e) {
+            if (e.target === paymentModal) {
+                paymentModal.classList.remove('active');
+            }
+        });
+        
+        // Payment method selection
+        document.querySelectorAll('.payment-method').forEach(method => {
+            method.addEventListener('click', function() {
+                document.querySelectorAll('.payment-method').forEach(m => {
+                    m.classList.remove('active');
+                });
+                this.classList.add('active');
+            });
+        });
+        
+        // Payment form submission
+        paymentForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // In a real application, this would process the payment
+            // For this demo, we'll just show a success message
+            alert('Paiement traité avec succès! Vous recevrez un email de confirmation.');
+            paymentModal.classList.remove('active');
+            bookingForm.reset();
+            
+            // Reset dates
+            document.getElementById('date-debut').value = tomorrowStr;
+            document.getElementById('date-fin').value = dayAfterStr;
+        });
+        
+        // Initialize payment method
+        document.querySelector('.payment-method[data-method="card"]').classList.add('active');
     </script>
 </body>
 </html>
