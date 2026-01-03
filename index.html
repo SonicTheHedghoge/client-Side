@@ -12,8 +12,11 @@
             --secondary: #10b981;
             --accent: #8b5cf6;
             --dark: #0f172a;
+            --darker: #020617;
             --light: #f8fafc;
             --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            --shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            --radius: 20px;
         }
         
         * {
@@ -24,7 +27,7 @@
         
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
             color: var(--light);
             overflow-x: hidden;
             line-height: 1.6;
@@ -147,6 +150,16 @@
         
         .cta-button i {
             font-size: 1.2rem;
+        }
+        
+        /* Mobile Menu */
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--light);
+            font-size: 1.5rem;
+            cursor: pointer;
         }
         
         /* Hero Section */
@@ -326,6 +339,25 @@
             transition: var(--transition);
             border: 1px solid rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s ease;
+        }
+        
+        .feature-card:hover::before {
+            transform: scaleX(1);
         }
         
         .feature-card:hover {
@@ -458,6 +490,7 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             max-width: 900px;
             margin: 0 auto;
+            box-shadow: var(--shadow);
         }
         
         .booking-header {
@@ -502,6 +535,7 @@
             outline: none;
             border-color: var(--primary);
             background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2);
         }
         
         .form-row {
@@ -542,6 +576,18 @@
             padding: 30px;
             border: 1px solid rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 5rem;
+            color: rgba(14, 165, 233, 0.1);
+            font-family: serif;
         }
         
         .testimonial-header {
@@ -573,6 +619,8 @@
             font-style: italic;
             color: #cbd5e1;
             margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
         }
         
         .rating {
@@ -676,6 +724,52 @@
             animation: float 6s ease-in-out infinite;
         }
         
+        /* Mobile Menu */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 80%;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            padding: 100px 30px 30px;
+            transition: right 0.5s ease;
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .mobile-menu.active {
+            right: 0;
+        }
+        
+        .mobile-menu ul {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        
+        .mobile-menu a {
+            color: var(--light);
+            text-decoration: none;
+            font-size: 1.4rem;
+            font-weight: 500;
+            padding: 10px 0;
+            display: block;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .close-menu {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            background: none;
+            border: none;
+            color: var(--light);
+            font-size: 2rem;
+            cursor: pointer;
+        }
+        
         /* Responsive Design */
         @media (max-width: 992px) {
             .hero h1 {
@@ -693,18 +787,22 @@
         }
         
         @media (max-width: 768px) {
-            .header-container {
-                flex-direction: column;
-                gap: 20px;
+            .mobile-toggle {
+                display: block;
             }
             
-            nav ul {
-                flex-wrap: wrap;
-                justify-content: center;
+            nav {
+                display: none;
+            }
+            
+            .header-container {
+                flex-direction: row;
+                justify-content: space-between;
             }
             
             .hero {
                 text-align: center;
+                padding-top: 100px;
             }
             
             .hero-content {
@@ -713,6 +811,8 @@
             
             .hero-buttons {
                 justify-content: center;
+                flex-direction: column;
+                align-items: center;
             }
             
             .hero-image {
@@ -727,6 +827,14 @@
                 flex-direction: column;
                 gap: 0;
             }
+            
+            .section {
+                padding: 80px 0;
+            }
+            
+            .section h2 {
+                font-size: 2.3rem;
+            }
         }
         
         @media (max-width: 576px) {
@@ -735,13 +843,38 @@
             }
             
             .hero-buttons {
-                flex-direction: column;
-                gap: 15px;
+                width: 100%;
             }
             
             .section h2 {
-                font-size: 2.2rem;
+                font-size: 2rem;
             }
+            
+            .stats {
+                padding: 20px 15px;
+            }
+            
+            .stat-value {
+                font-size: 2rem;
+            }
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.5);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(var(--primary), var(--secondary));
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
         }
     </style>
 </head>
@@ -765,8 +898,25 @@
                 <i class="fab fa-whatsapp"></i>
                 Réserver
             </button>
+            <button class="mobile-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
     </header>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu">
+        <button class="close-menu">
+            <i class="fas fa-times"></i>
+        </button>
+        <ul>
+            <li><a href="#circuits">Circuits</a></li>
+            <li><a href="#scooters">Scooters</a></li>
+            <li><a href="#ecologie">Écologie</a></li>
+            <li><a href="#avis">Avis</a></li>
+            <li><a href="#">Réserver</a></li>
+        </ul>
+    </div>
 
     <!-- Hero Section -->
     <section class="hero">
@@ -1113,6 +1263,9 @@
                         behavior: 'smooth'
                     });
                 }
+                
+                // Close mobile menu if open
+                document.querySelector('.mobile-menu').classList.remove('active');
             });
         });
         
@@ -1129,6 +1282,37 @@
                 alert('Merci pour votre réservation ! Nous vous contacterons sous peu pour confirmer votre aventure DjerBike.');
             });
         }
+        
+        // Mobile menu toggle
+        const mobileToggle = document.querySelector('.mobile-toggle');
+        const closeMenu = document.querySelector('.close-menu');
+        const mobileMenu = document.querySelector('.mobile-menu');
+        
+        mobileToggle.addEventListener('click', function() {
+            mobileMenu.classList.add('active');
+        });
+        
+        closeMenu.addEventListener('click', function() {
+            mobileMenu.classList.remove('active');
+        });
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!mobileMenu.contains(e.target) && !mobileToggle.contains(e.target) && mobileMenu.classList.contains('active')) {
+                mobileMenu.classList.remove('active');
+            }
+        });
+        
+        // Initialize date inputs with tomorrow's date
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const tomorrowStr = tomorrow.toISOString().split('T')[0];
+        document.getElementById('date-debut').value = tomorrowStr;
+        
+        const dayAfter = new Date();
+        dayAfter.setDate(dayAfter.getDate() + 2);
+        const dayAfterStr = dayAfter.toISOString().split('T')[0];
+        document.getElementById('date-fin').value = dayAfterStr;
     </script>
 </body>
 </html>
