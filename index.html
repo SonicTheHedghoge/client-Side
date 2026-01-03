@@ -785,6 +785,8 @@
             opacity: 0;
             visibility: hidden;
             transition: all 0.3s ease;
+            padding: 20px;
+            box-sizing: border-box;
         }
         
         .modal.active {
@@ -795,12 +797,15 @@
         .modal-content {
             background: var(--dark);
             border-radius: 20px;
-            width: 90%;
+            width: 100%;
             max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
             padding: 40px;
             position: relative;
             transform: translateY(20px);
             transition: transform 0.4s ease;
+            box-shadow: var(--shadow);
         }
         
         .modal.active .modal-content {
@@ -992,6 +997,7 @@
             
             .modal-content {
                 padding: 30px 20px;
+                max-height: 95vh;
             }
         }
         
@@ -1011,6 +1017,20 @@
         
         ::-webkit-scrollbar-thumb:hover {
             background: var(--primary);
+        }
+        
+        /* Custom scrollbar for modal */
+        .modal-content::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .modal-content::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .modal-content::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 3px;
         }
     </style>
 </head>
@@ -1372,7 +1392,7 @@
             </div>
             
             <div class="copyright">
-                <p>&copy; 2023 DjerBike. Tous droits réservés. Conçu avec <i class="fas fa-heart" style="color: var(--secondary);"></i> pour la planète.</p>
+                <p>© 2023 DjerBike. Tous droits réservés. Conçu avec <i class="fas fa-heart" style="color: var(--secondary);"></i> pour la planète.</p>
             </div>
         </div>
     </footer>
@@ -1615,10 +1635,10 @@
             const diffTime = Math.abs(end - start);
             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
             
-            const total = pricePerDay * diffDays * persons;
+            const total = pricePerDay * diffDays * parseInt(persons);
             
             // Update summary
-            document.getElementById('summaryCircuit').textContent = circuit;
+            document.getElementById('summaryCircuit').textContent = circuit || 'Non spécifié';
             document.getElementById('summaryDates').textContent = `${startDate} à ${endDate} (${diffDays} jours)`;
             document.getElementById('summaryScooter').textContent = scooterName;
             document.getElementById('summaryPersons').textContent = `${persons} personne(s)`;
